@@ -55,6 +55,13 @@ docker stop zhekafitness
 docker rm zhekafitness
 ```
 
+Опубликованный в GHCR образ можно скачать и запустить так:
+
+```powershell
+docker pull ghcr.io/4m0r1ck/zhekafit:latest
+docker run --name zhekafitness -d -p 8080:8080 ghcr.io/4m0r1ck/zhekafit:latest
+```
+
 Workflow `.github/workflows/ci.yml` запускает `npm ci`, lint, тесты и production-сборку для каждого push в `main` и pull request в `main`. После успешной проверки push в `main` собирает Docker-образ и публикует его в GitHub Container Registry под тегами `latest` и SHA коммита.
 
 Чтобы опубликованный сайт подключался к Supabase, в настройках репозитория добавь в **Settings → Secrets and variables → Actions → Variables** переменные `VITE_SUPABASE_URL` и `VITE_SUPABASE_PUBLISHABLE_KEY`. Это публичные клиентские настройки, которые Vite встраивает в браузерный код. Workflow завершит публикацию с ошибкой, если переменные не заданы. При необходимости сделай созданный пакет `ghcr.io/4m0r1ck/zhekafit` публичным в **Packages → Package settings → Change visibility**.
