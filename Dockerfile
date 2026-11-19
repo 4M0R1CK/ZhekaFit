@@ -16,7 +16,7 @@ ENV VITE_PUBLIC_SITE_URL=${VITE_PUBLIC_SITE_URL}
 
 RUN ["/bin/sh", "-c", "test -n \"$$VITE_SUPABASE_URL\" && test -n \"$$VITE_SUPABASE_PUBLISHABLE_KEY\" && npm run build"]
 
-FROM nginx:alpine AS runtime
+FROM nginx/nginx-unprivileged:1.30.6-alpine-slim AS runtime
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx-security-headers.conf /etc/nginx/security-headers.conf
