@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/</loc></url>
+  <url><loc>https://example.com/about</loc></url>
+  <url><loc>https://example.com/contacts</loc></url>
+  <url><loc>https://example.com/faq</loc></url>
+  <url><loc>https://example.com/pricing</loc></url>
+  <url><loc>https://example.com/programs</loc></url>
+  <url><loc>https://example.com/programs/cardio-endurance</loc></url>
+  <url><loc>https://example.com/programs/functional-movement</loc></url>
+  <url><loc>https://example.com/programs/group-circuit</loc></url>
+  <url><loc>https://example.com/programs/mobility-recovery</loc></url>
+  <url><loc>https://example.com/programs/strength-foundation</loc></url>
+  <url><loc>https://example.com/programs/strength-progress</loc></url>
+  <url><loc>https://example.com/schedule</loc></url>
+  <url><loc>https://example.com/trainers</loc></url>
+  <url><loc>https://example.com/trainers/group-team</loc></url>
+  <url><loc>https://example.com/trainers/recovery-team</loc></url>
+  <url><loc>https://example.com/trainers/strength-team</loc></url>
+</urlset>
