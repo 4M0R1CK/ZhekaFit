@@ -1,0 +1,3 @@
+NAME                IMAGE                                         COMMAND                  SERVICE    CREATED              STATUS              PORTS
+deploy-frontend-1   deploy-frontend                               "/docker-entrypoint.…"   frontend   About a minute ago   Up About a minute   8080/tcp
+deploy-nginx-1      nginx/nginx-unprivileged:1.30.6-alpine-slim   "/docker-entrypoint.…"   nginx      About a minute ago   Up About a minute   127.0.0.1:8081->8080/tcp, 127.0.0.1:4443->8443/tcp
