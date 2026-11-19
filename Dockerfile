@@ -12,13 +12,12 @@ ARG VITE_SUPABASE_PUBLISHABLE_KEY
 ENV VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
 ENV VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
 
-RUN test -n "$VITE_SUPABASE_URL" \
-    && test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" \
-    && npm run build
+RUN ["/bin/sh", "-c", "test -n \"$$VITE_SUPABASE_URL\" && test -n \"$$VITE_SUPABASE_PUBLISHABLE_KEY\" && npm run build"]
 
 FROM nginx:alpine AS runtime
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx-security-headers.conf /etc/nginx/security-headers.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 8080

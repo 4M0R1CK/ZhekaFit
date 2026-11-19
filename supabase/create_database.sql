@@ -37,6 +37,23 @@ alter table public.profiles add column if not exists created_at timestamptz not 
 alter table public.profiles add column if not exists updated_at timestamptz not null default now();
 alter table public.profiles alter column id set default gen_random_uuid();
 alter table public.profiles alter column id set not null;
+do $$ begin
+  if not exists(select 1 from pg_constraint where conname='profiles_first_name_length_check' and conrelid='public.profiles'::regclass) then
+    alter table public.profiles add constraint profiles_first_name_length_check check(length(btrim(first_name)) <= 80) not valid;
+  end if;
+  if not exists(select 1 from pg_constraint where conname='profiles_last_name_length_check' and conrelid='public.profiles'::regclass) then
+    alter table public.profiles add constraint profiles_last_name_length_check check(length(btrim(last_name)) <= 80) not valid;
+  end if;
+  if not exists(select 1 from pg_constraint where conname='profiles_phone_length_check' and conrelid='public.profiles'::regclass) then
+    alter table public.profiles add constraint profiles_phone_length_check check(phone is null or length(phone) <= 32) not valid;
+  end if;
+  if not exists(select 1 from pg_constraint where conname='profiles_avatar_path_check' and conrelid='public.profiles'::regclass) then
+    alter table public.profiles add constraint profiles_avatar_path_check check(avatar_path is null or (length(avatar_path) <= 512 and avatar_path like ('profiles/' || id::text || '/%'))) not valid;
+  end if;
+  if not exists(select 1 from pg_constraint where conname='profiles_training_preferences_check' and conrelid='public.profiles'::regclass) then
+    alter table public.profiles add constraint profiles_training_preferences_check check(cardinality(training_preferences) <= 5 and training_preferences <@ array['strength','cardio','functional','recovery','group']::text[]) not valid;
+  end if;
+end $$;
 
 create table if not exists public.programs (
   id uuid primary key default gen_random_uuid(), slug text not null unique, title text not null,
@@ -259,7 +276,6 @@ alter table public.bookings enable row level security;
 drop policy if exists "Own profile read" on public.profiles;
 create policy "Own profile read" on public.profiles for select to authenticated using((select auth.uid()) = id);
 drop policy if exists "Own profile insert" on public.profiles;
-create policy "Own profile insert" on public.profiles for insert to authenticated with check((select auth.uid()) = id);
 drop policy if exists "Own profile update" on public.profiles;
 create policy "Own profile update" on public.profiles for update to authenticated using((select auth.uid()) = id) with check((select auth.uid()) = id);
 drop policy if exists "Published programs read" on public.programs;
@@ -339,7 +355,8 @@ revoke all on public.profiles, public.programs, public.trainers, public.program_
   public.membership_plans, public.memberships, public.class_sessions, public.bookings
   from public, anon, authenticated;
 grant select on public.programs, public.trainers, public.program_trainers, public.membership_plans, public.class_sessions to anon, authenticated;
-grant select, insert, update on public.profiles to authenticated;
+grant select on public.profiles to authenticated;
+grant update(first_name,last_name,phone,birth_date,avatar_path,training_preferences) on public.profiles to authenticated;
 grant select on public.memberships to authenticated;
 grant insert on public.memberships to authenticated;
 grant select on public.bookings to authenticated;
